@@ -27,7 +27,7 @@ void cadastrar_produto(FILE* f) {
     scanf("%d", &p.quantidade);
     p.ativo = 1;
 
-    f = fopen("produtos.dat", "ab");
+    f = fopen("produtos.txt", "ab");
     if (!f) {
         perror("Erro ao abrir o arquivo");
         return;
