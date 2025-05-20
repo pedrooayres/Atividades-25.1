@@ -27,17 +27,28 @@ void cadastrar_produto(FILE* f) {
     scanf("%d", &p.quantidade);
     p.ativo = 1;
 
-    f = fopen("produtos.txt", "ab");
+    // Grava no arquivo binário
+    f = fopen("produtos.dat", "ab");
     if (!f) {
-        perror("Erro ao abrir o arquivo");
+        perror("Erro ao abrir o arquivo binario");
         return;
     }
-
     fwrite(&p, sizeof(Produto), 1, f);
     fclose(f);
-    printf("Produto cadastrado com sucesso.\n");
 
+    // Grava também no arquivo de texto
+    FILE* txt = fopen("produtos.txt", "a");
+    if (!txt) {
+        perror("Erro ao abrir o arquivo de texto");
+        return;
+    }
+    fprintf(txt, "Codigo: %d\nNome: %s\nPreco: %.2f\nQuantidade: %d\n\n",
+            p.codigo, p.nome, p.preco, p.quantidade);
+    fclose(txt);
+
+    printf("Produto cadastrado com sucesso.\n");
 }
+
 
 
 void listar_produtos(FILE* f) {
