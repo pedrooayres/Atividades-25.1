@@ -180,8 +180,8 @@ int main() {
             case 1: cadastrar_produto(f); break;
             case 2: listar_produtos(f); break;
             case 3: buscar_produto(f); break;
-            //case 4: atualizar_produto(f); break;
-            //case 5: remover_produto(f); break;
+            case 4: atualizar_produto(f); break;
+            case 5: remover_produto(f); break;
             case 6: printf("Saindo...\n"); break;
             default: printf("Opcao invalida!\n");
         }
