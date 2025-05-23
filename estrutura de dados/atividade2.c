@@ -94,3 +94,30 @@ int contar_elementos(No* tabela[]){
     }
     return elementos;
 }
+int main(){
+    No* tabela[TAM];
+    // inserções de teste 
+    inserir(tabela, 10);
+    inserir(tabela, 20);
+    inserir(tabela, 30);
+    inserir(tabela, 5);
+    inserir(tabela, 15);
+    inserir(tabela, 100);
+
+    printf("Tabela Hash:\n");
+    imprimir(tabela);
+
+    printf("\n a chave 25 existe?%s\n", chave_existe(tabela, 25) ? "Sim" : "Nao");
+    printf("\n a chave 99 existe?%s\n", chave_existe(tabela, 99) ? "Sim" : "Nao");
+
+    // liberar memória
+    for(int i = 0; i < TAM; i++){
+        No* atual = tabela[i];
+        while(atual != NULL){
+            No* temp = atual;
+            atual = atual -> prox;
+            free(temp);
+        }
+    }
+    return 0;
+}
