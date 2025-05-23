@@ -1,123 +1,151 @@
-// estrurura basica do no
-# define TAM 10
-# include <stdio.h>
-# include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct No{
+#define TAM 10
+
+// Estrutura do nó
+typedef struct No {
     int valor;
     struct No* prox;
-}No;
+} No;
 
-// inserir no incio da lista(8º questão)
-void inserir(No* tabela[],int valor){
+// Inserir no início (questão 8)
+void inserir(No* tabela[], int valor) {
     int indice = valor % TAM;
     No* novo = (No*) malloc(sizeof(No));
-    novo -> valor = valor;
-    novo -> prox = tabela[indice];
+    if (novo == NULL) {
+        printf("Erro de alocação de memória.\n");
+        return;
+    }
+    novo->valor = valor;
+    novo->prox = tabela[indice];
     tabela[indice] = novo;
 }
-// inserir no final da lista(9º questão)
-void inserirFinal(No* tabela[], int valor){
+
+// Inserir no final (questão 9)
+void inserir_final(No* tabela[], int valor) {
     int indice = valor % TAM;
     No* novo = (No*) malloc(sizeof(No));
-    novo -> valor = valor;
-    novo -> prox = NULL;
-    if(tabela[indice] == NULL){
+    if (novo == NULL) {
+        printf("Erro de alocação de memória.\n");
+        return;
+    }
+    novo->valor = valor;
+    novo->prox = NULL;
+
+    if (tabela[indice] == NULL) {
         tabela[indice] = novo;
-    }else{
+    } else {
         No* aux = tabela[indice];
-        while(aux -> prox != NULL){
-            aux = aux -> prox;
+        while (aux->prox != NULL) {
+            aux = aux->prox;
         }
-        aux -> prox = novo;
+        aux->prox = novo;
     }
 }
-// imprimir lista(10º questão)
-void imprimir(No* tabela[]){
-    for(int i = 0; i < TAM; i++){
-        printf("%d: ", i);
+
+// Imprimir tabela hash (questão 10)
+void imprimir(No* tabela[]) {
+    for (int i = 0; i < TAM; i++) {
+        printf("[%d]: ", i);
         No* aux = tabela[i];
-        while(aux != NULL){
-            printf("%d ", aux -> valor);
-            aux = aux -> prox;
+        while (aux != NULL) {
+            printf("%d -> ", aux->valor);
+            aux = aux->prox;
         }
-        printf("\n");
+        printf("NULL\n");
     }
 }
-// verificar chave(11º questão)
-int chave_existe(No* tabela[], int valor){
+
+// Verificar se chave existe (questão 11)
+int chave_existe(No* tabela[], int valor) {
     int indice = valor % TAM;
     No* aux = tabela[indice];
-    while(aux != NULL){
-        if(aux -> valor == valor){
+    while (aux != NULL) {
+        if (aux->valor == valor)
             return 1;
-        }
-        aux = aux -> prox;
+        aux = aux->prox;
     }
     return 0;
 }
-// taxa de ocupação(12º questão)
-float taxa_ocupacao(No* tabela[]){
-    int oucupadas = 0;
-    for(int i = 0; i < TAM; i++){
-        No* aux = tabela[i];
-        while(aux != NULL){
-            oucupadas++;
-            aux = aux -> prox;
-        }
+
+// Calcular taxa de ocupação (questão 12)
+float taxa_ocupacao(No* tabela[]) {
+    int ocupadas = 0;
+    for (int i = 0; i < TAM; i++) {
+        if (tabela[i] != NULL)
+            ocupadas++;
     }
-    return (float) oucupadas / TAM;
+    return (float)ocupadas / TAM;
 }
-// oucupadasar colisões (13º questão)
-int contar_colisoes(No* tabela[]){
+
+// Contar colisões (questão 13)
+int contar_colisoes(No* tabela[]) {
     int colisoes = 0;
-    for(int i = 0; i < TAM; i++){
+    for (int i = 0; i < TAM; i++) {
         No* aux = tabela[i];
-        while(aux != NULL){
-            if(aux -> prox != NULL){
-                colisoes++;
-            }
-            aux = aux -> prox;
+        int count = 0;
+        while (aux != NULL) {
+            count++;
+            aux = aux->prox;
         }
+        if (count > 1)
+            colisoes += (count - 1);
     }
     return colisoes;
 }
-// contar total de elementos(14º questão)
-int contar_elementos(No* tabela[]){
-    int elementos = 0;
-    for(int i = 0; i < TAM; i++){
+
+// Contar total de elementos (questão 14)
+int contar_elementos(No* tabela[]) {
+    int total = 0;
+    for (int i = 0; i < TAM; i++) {
         No* aux = tabela[i];
-        while(aux != NULL){
-            elementos++;
-            aux = aux -> prox;
+        while (aux != NULL) {
+            total++;
+            aux = aux->prox;
         }
     }
-    return elementos;
+    return total;
 }
-int main(){
-    No* tabela[TAM];
-    // inserções de teste 
-    inserir(tabela, 10);
-    inserir(tabela, 20);
-    inserir(tabela, 30);
-    inserir(tabela, 5);
-    inserir(tabela, 15);
-    inserir(tabela, 100);
 
-    printf("Tabela Hash:\n");
+// Função principal para testar tudo
+int main() {
+    // Inicializa a tabela com NULL
+    No* tabela[TAM];
+    for (int i = 0; i < TAM; i++) {
+        tabela[i] = NULL;
+    }
+
+    // Teste de inserções
+    inserir(tabela, 15);
+    inserir(tabela, 25);
+    inserir(tabela, 35);
+    inserir(tabela, 5);
+    inserir(tabela, 22);
+    inserir_final(tabela, 32);
+    inserir_final(tabela, 42);
+
+    // Impressão da tabela
+    printf("\nTabela Hash:\n");
     imprimir(tabela);
 
-    printf("\n a chave 25 existe?%s\n", chave_existe(tabela, 25) ? "Sim" : "Nao");
-    printf("\n a chave 99 existe?%s\n", chave_existe(tabela, 99) ? "Sim" : "Nao");
+    // Testes de funções auxiliares
+    printf("\nChave 25 existe? %s\n", chave_existe(tabela, 25) ? "Sim" : "Não");
+    printf("Chave 99 existe? %s\n", chave_existe(tabela, 99) ? "Sim" : "Não");
 
-    // liberar memória
-    for(int i = 0; i < TAM; i++){
+    printf("\nTaxa de ocupação: %.2f\n", taxa_ocupacao(tabela));
+    printf("Total de colisões: %d\n", contar_colisoes(tabela));
+    printf("Total de elementos: %d\n", contar_elementos(tabela));
+
+    // Liberação de memória
+    for (int i = 0; i < TAM; i++) {
         No* atual = tabela[i];
-        while(atual != NULL){
+        while (atual != NULL) {
             No* temp = atual;
-            atual = atual -> prox;
+            atual = atual->prox;
             free(temp);
         }
     }
+
     return 0;
 }
